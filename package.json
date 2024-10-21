@@ -1,0 +1,11 @@
+{
+  "name": "cms-employee-tracker",
+  "version": "1.0.0",
+  "description": "Employee Tracker assignment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Angelica Mora",
+  "license": "ISC"
+}
