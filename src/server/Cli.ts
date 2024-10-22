@@ -1,6 +1,6 @@
 import inquirer from "inquirer";
-import { Department, Role, Employee } from "./employee-classes.js";
-import Table from "cli-table3";
+import { Department, Role, Employee } from "./classes.ts";
+import Table from "db/schema.sql";
 
 class Cli {
     async startCli(): Promise<void> {
@@ -60,7 +60,7 @@ class Cli {
             head: ['ID', 'Department Name']
         });
         
-        departments.forEach(dept => {
+        departments.forEach(dept. => {
             table.push([dept.id, dept.name]);
         });
         

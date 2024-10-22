@@ -1,4 +1,4 @@
-import Cli from './Cli';
+import Cli from './server/Cli';
 
 (async () => {
     const cli = new Cli();

@@ -8,26 +8,19 @@ class Employee {
   lastName: string;
   roleId: number;
   managerId: number | null;
-  role?: Role;           // Optional role reference
-  manager?: Employee;    // Optional manager reference
-
   // Constructor
   constructor(
       id: number,
       firstName: string,
       lastName: string,
       roleId: number,
-      managerId: number | null,
-      role?: Role,
-      manager?: Employee
+      managerId: number | null
   ) {
       this.id = id;
       this.firstName = firstName;
       this.lastName = lastName;
       this.roleId = roleId;
       this.managerId = managerId;
-      this.role = role;
-      this.manager = manager;
   }
 
   // Method to get full name
