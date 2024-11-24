@@ -30,8 +30,8 @@ class Employee {
       lastName: string,
       roleId: number,
       managerId: number | null,
-      role?: Role, // Optional role parameter
-      manager?: Employee // Optional manager parameter
+    //   role?: Role, // Optional role parameter
+    //   manager?: Employee // Optional manager parameter
   ) {
       this.id = id;
       this.firstName = firstName;
@@ -66,4 +66,4 @@ class Employee {
 }
 
 // Export all classes
-export { Employee, Role };
+export { Employee };

@@ -1,4 +1,4 @@
-import inquirer from "inquirer.js";
+import inquirer from "inquirer";
 import Department from "./Department.js";
 import Role from "./Role.js";
 import Employee from "./Employee.js";

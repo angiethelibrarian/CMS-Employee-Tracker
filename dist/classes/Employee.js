@@ -11,9 +11,7 @@
 // }
 class Employee {
     // Constructor
-    constructor(id, firstName, lastName, roleId, managerId, role, // Optional role parameter
-    manager // Optional manager parameter
-    ) {
+    constructor(id, firstName, lastName, roleId, managerId) {
         // Declare properties
         Object.defineProperty(this, "id", {
             enumerable: true,
@@ -85,4 +83,4 @@ class Employee {
     }
 }
 // Export all classes
-export { Employee, Role };
+export { Employee };

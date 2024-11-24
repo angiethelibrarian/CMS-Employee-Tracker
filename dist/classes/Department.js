@@ -3,6 +3,8 @@ import { Pool } from 'pg';
 class Department {
     // Constructor
     constructor(id, name) {
+        // Declare properties
+        // save(): void;
         Object.defineProperty(this, "id", {
             enumerable: true,
             configurable: true,
@@ -36,5 +38,9 @@ try {
 }
 catch (error) {
     console.error('Database query error:', error);
+    // try {
+    //   const result = await Department.query('select $1::text as name', ['brianc'])
+    //   console.log('hello from', result.rows[0])
+    // }
 }
 export default Department;
