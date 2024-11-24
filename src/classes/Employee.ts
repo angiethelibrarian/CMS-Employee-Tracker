@@ -1,17 +1,17 @@
 import inquirer from "inquirer";
 
 // Assuming Role and Manager are defined elsewhere
-class Role {
-  id: number;
-  title: string;
-  salary: number;
+// class Role {
+//   id: number;
+//   title: string;
+//   salary: number;
 
-  constructor(id: number, title: string, salary: number) {
-      this.id = id;
-      this.title = title;
-      this.salary = salary;
-  }
-}
+//   constructor(id: number, title: string, salary: number) {
+//       this.id = id;
+//       this.title = title;
+//       this.salary = salary;
+//   }
+// }
 
 class Employee {
   // Declare properties

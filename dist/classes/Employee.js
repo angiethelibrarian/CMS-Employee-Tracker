@@ -1,29 +1,14 @@
 // Assuming Role and Manager are defined elsewhere
-class Role {
-    constructor(id, title, salary) {
-        Object.defineProperty(this, "id", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
-        Object.defineProperty(this, "title", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
-        Object.defineProperty(this, "salary", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
-        this.id = id;
-        this.title = title;
-        this.salary = salary;
-    }
-}
+// class Role {
+//   id: number;
+//   title: string;
+//   salary: number;
+//   constructor(id: number, title: string, salary: number) {
+//       this.id = id;
+//       this.title = title;
+//       this.salary = salary;
+//   }
+// }
 class Employee {
     // Constructor
     constructor(id, firstName, lastName, roleId, managerId, role, // Optional role parameter

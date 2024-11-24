@@ -1,7 +1,7 @@
-import inquirer from "inquirer";
-import Department from "./Department";
-import Role from "./Role";
-import { Employee } from "./Employee";
+import inquirer from "inquirer.js";
+import Department from "./Department.js";
+import Role from "./Role.js";
+import Employee from "./Employee.js";
 //Class
 class Cli {
     async startCli() {
