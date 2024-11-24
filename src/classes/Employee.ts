@@ -1,6 +1,18 @@
 import inquirer from "inquirer";
 
-// Employee class
+// Assuming Role and Manager are defined elsewhere
+class Role {
+  id: number;
+  title: string;
+  salary: number;
+
+  constructor(id: number, title: string, salary: number) {
+      this.id = id;
+      this.title = title;
+      this.salary = salary;
+  }
+}
+
 class Employee {
   // Declare properties
   id: number;
@@ -8,19 +20,26 @@ class Employee {
   lastName: string;
   roleId: number;
   managerId: number | null;
+  role?: Role; // Optional role property
+  manager?: Employee; // Optional manager property
+
   // Constructor
   constructor(
       id: number,
       firstName: string,
       lastName: string,
       roleId: number,
-      managerId: number | null
+      managerId: number | null,
+      role?: Role, // Optional role parameter
+      manager?: Employee // Optional manager parameter
   ) {
       this.id = id;
       this.firstName = firstName;
       this.lastName = lastName;
       this.roleId = roleId;
       this.managerId = managerId;
+      this.role = role;
+      this.manager = manager;
   }
 
   // Method to get full name
@@ -47,4 +66,4 @@ class Employee {
 }
 
 // Export all classes
-export { Department, Role, Employee };
+export { Employee, Role };

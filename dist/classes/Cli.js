@@ -1,9 +1,10 @@
 import inquirer from "inquirer";
-import { Department, Role, Employee } from "./classes.ts";
-import Table from "db/schema.sql";
-
+import Department from "./Department";
+import Role from "./Role";
+import { Employee } from "./Employee";
+//Class
 class Cli {
-    async startCli(): Promise<void> {
+    async startCli() {
         let exit = false;
         while (!exit) {
             const { choice } = await inquirer.prompt([
@@ -23,7 +24,6 @@ class Cli {
                     ]
                 }
             ]);
-
             switch (choice) {
                 case 'View all departments':
                     await this.viewDepartments();
@@ -52,28 +52,23 @@ class Cli {
             }
         }
     }
-
     // View all departments
-    async viewDepartments(): Promise<void> {
+    async viewDepartments() {
         const departments = await Department.getAll();
         const table = new Table({
             head: ['ID', 'Department Name']
         });
-        
-        departments.forEach(dept. => {
+        departments.forEach(dept => {
             table.push([dept.id, dept.name]);
         });
-        
         console.log(table.toString());
     }
-
     // View all roles
-    async viewRoles(): Promise<void> {
+    async viewRoles() {
         const roles = await Role.getAll();
         const table = new Table({
             head: ['ID', 'Title', 'Department', 'Salary']
         });
-        
         roles.forEach(role => {
             table.push([
                 role.id,
@@ -82,17 +77,14 @@ class Cli {
                 `$${role.salary.toLocaleString()}`
             ]);
         });
-        
         console.log(table.toString());
     }
-
     // View all employees
-    async viewEmployees(): Promise<void> {
+    async viewEmployees() {
         const employees = await Employee.getAll();
         const table = new Table({
             head: ['ID', 'First Name', 'Last Name', 'Title', 'Department', 'Salary', 'Manager']
         });
-        
         employees.forEach(emp => {
             table.push([
                 emp.id,
@@ -104,12 +96,10 @@ class Cli {
                 emp.manager_name || 'None'
             ]);
         });
-        
         console.log(table.toString());
     }
-
     // Add a department
-    async addDepartment(): Promise<void> {
+    async addDepartment() {
         const { name } = await inquirer.prompt([
             {
                 type: 'input',
@@ -118,16 +108,13 @@ class Cli {
                 validate: (input) => input.trim().length > 0 || 'Department name is required'
             }
         ]);
-
         const department = new Department(0, name);
         await department.save();
         console.log(`Added ${name} department to the database`);
     }
-
     // Add a role
-    async addRole(): Promise<void> {
+    async addRole() {
         const departments = await Department.getAll();
-        
         const answers = await inquirer.prompt([
             {
                 type: 'input',
@@ -151,17 +138,14 @@ class Cli {
                 }))
             }
         ]);
-
         const role = new Role(0, answers.title, parseFloat(answers.salary), answers.departmentId);
         await role.save();
         console.log(`Added ${answers.title} role to the database`);
     }
-
     // Add an employee
-    async addEmployee(): Promise<void> {
+    async addEmployee() {
         const roles = await Role.getAll();
         const employees = await Employee.getAll();
-        
         const answers = await inquirer.prompt([
             {
                 type: 'input',
@@ -197,23 +181,14 @@ class Cli {
                 ]
             }
         ]);
-
-        const employee = new Employee(
-            0,
-            answers.firstName,
-            answers.lastName,
-            answers.roleId,
-            answers.managerId
-        );
+        const employee = new Employee(0, answers.firstName, answers.lastName, answers.roleId, answers.managerId);
         await employee.save();
         console.log(`Added ${answers.firstName} ${answers.lastName} to the database`);
     }
-
     // Update an employee role
-    async updateEmployeeRole(): Promise<void> {
+    async updateEmployeeRole() {
         const employees = await Employee.getAll();
         const roles = await Role.getAll();
-
         const answers = await inquirer.prompt([
             {
                 type: 'list',
@@ -234,16 +209,11 @@ class Cli {
                 }))
             }
         ]);
-
-        const employee = new Employee(
-            answers.employeeId,
-            '', '', // These values won't be used for the update
-            answers.roleId,
-            null
-        );
+        // Assuming you have an updateRole method in your Employee class
+        const employee = new Employee(answers.employeeId, '', '', // These values won't be used for the update
+        answers.roleId, null);
         await employee.updateRole(answers.roleId);
         console.log('Updated employee\'s role');
     }
 }
-
 export default Cli;

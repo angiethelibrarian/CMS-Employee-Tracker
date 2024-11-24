@@ -29,3 +29,5 @@ class Role {
       console.log(`Department ID: ${this.departmentId}`);
       }
   }
+
+  export default Role;
