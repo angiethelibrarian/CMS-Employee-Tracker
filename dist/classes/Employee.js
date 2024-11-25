@@ -1,17 +1,9 @@
-// Assuming Role and Manager are defined elsewhere
-// class Role {
-//   id: number;
-//   title: string;
-//   salary: number;
-//   constructor(id: number, title: string, salary: number) {
-//       this.id = id;
-//       this.title = title;
-//       this.salary = salary;
-//   }
-// }
+// Employee class
 class Employee {
     // Constructor
-    constructor(id, firstName, lastName, roleId, managerId) {
+    constructor(id, firstName, lastName, roleId, managerId, role, // Optional role parameter
+    manager // Optional manager parameter
+    ) {
         // Declare properties
         Object.defineProperty(this, "id", {
             enumerable: true,
