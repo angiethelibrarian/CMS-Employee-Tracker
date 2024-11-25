@@ -2,7 +2,6 @@
 class Role {
     // Constructor
     constructor(id, title, salary, departmentId) {
-        // Declare properties
         Object.defineProperty(this, "id", {
             enumerable: true,
             configurable: true,

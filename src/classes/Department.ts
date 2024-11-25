@@ -3,7 +3,6 @@ import { Pool } from 'pg';
 
 // Department class
 class Department {
-  // Declare properties
   id: number;
   name: string;
   private pool: Pool;
@@ -31,12 +30,4 @@ class Department {
     }
   }
 }
-
-// Example usage
-(async () => {
-  const department = new Department(1, 'Engineering');
-  department.printDetails();
-  await department.queryDatabase('SELECT $1::text as name', ['brianc']);
-})();
-
 export default Department;

@@ -2,7 +2,6 @@ import inquirer from "inquirer";
 
 // Role class
 class Role {
-  // Declare properties
   id: number;
   title: string;
   salary: number;

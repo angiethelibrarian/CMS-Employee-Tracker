@@ -2,7 +2,6 @@ import inquirer from "inquirer";
 import Department from "./Department";
 import Role from "./Role";
 import { Employee } from "./Employee";
-import Table from 'cli-table'; // Import the Table class
 
 // Class
 class Cli {
@@ -27,74 +26,63 @@ class Cli {
         }
       ]);
 
-      switch (choice) {
-        case 'View all departments':
-          await this.viewDepartments();
-          break;
-        case 'View all roles':
-          await this.viewRoles();
-          break;
-        case 'View all employees':
-          await this.viewEmployees();
-          break;
-        case 'Add a department':
-          await this.addDepartment();
-          break;
-        case 'Add a role':
-          await this.addRole();
-          break;
-        case 'Add an employee':
-          await this.addEmployee();
-          break;
-        case 'Update an employee role':
-          await this.updateEmployeeRole();
-          break;
-        case 'Exit':
-          exit = true;
-          break;
+      try {
+        switch (choice) {
+          case 'View all departments':
+            await this.viewDepartments();
+            break;
+          case 'View all roles':
+            await this.viewRoles();
+            break;
+          case 'View all employees':
+            await this.viewEmployees();
+            break;
+          case 'Add a department':
+            await this.addDepartment();
+            break;
+          case 'Add a role':
+            await this.addRole();
+            break;
+          case 'Add an employee':
+            await this.addEmployee();
+            break;
+          case 'Update an employee role':
+            await this.updateEmployeeRole();
+            break;
+          case 'Exit':
+            exit = true;
+            break;
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
-  }
 
   // View all departments
   async viewDepartments(): Promise<void> {
     try {
       const departments = await Department.getAll();
-      const table = new Table({
-        head: ['ID', 'Department Name']
-      });
-
-      departments.forEach(dept => {
-        table.push([dept.id, dept.name]);
-      });
-
-      console.log(table.toString());
+      console.log('Departments:');
+      departments.forEach(({ id, name }) => console.log(`ID: ${id} | Name: ${name}`));
+      console.log();
     } catch (error) {
-      console.error('Error fetching departments:', error);
+      console.log(error);
     }
   }
+
 
   // View all roles
   async viewRoles(): Promise<void> {
     try {
       const roles = await Role.getAll();
-      const table = new Table({
-        head: ['ID', 'Title', 'Department', 'Salary'],
-        colWidths: [10, 20, 20, 15] // Set column widths
-      });
-
-      roles.forEach(role => {
-        table.push([
-          role.id,
-          role.title,
-          role.department, // Ensure this property exists
-          `$${role.salary.toLocaleString()}`
-        ]);
-      });
-
-      console.log(table.toString());
+      console.log('\nRoles:');
+      roles.forEach(({ id, title, department, salary }) =>
+        console.log(`ID: ${id} | Title: ${title} | Department: ${department} | Salary: $${salary.toFixed(2)}`)
+      );
+      console.log();
     } catch (error) {
-      console.error('Error fetching roles:', error);
+      console.log(error);
     }
   }
 
@@ -102,26 +90,16 @@ class Cli {
   async viewEmployees(): Promise<void> {
     try {
       const employees = await Employee.getAll();
-      const table = new Table({
-        head: ['ID', 'First Name', 'Last Name', 'Title', 'Department', 'Salary', 'Manager'],
-        colWidths: [10, 15, 15, 20, 20, 15, 20] // Set column widths
-      });
-
-      employees.forEach(emp => {
-        table.push([
-          emp.id,
-          emp.first_name, // Ensure property names match
-          emp.last_name, // Ensure property names match
-          emp.title, // Ensure this property exists
-          emp.department, // Ensure this property exists
-          `$${emp.salary.toLocaleString()}`,
-          emp.manager_id || 'None' // Ensure this property exists
-        ]);
-      });
-
-      console.log(table.toString());
+      console.log('\nEmployees:');
+      employees.forEach(({ id, first_name, last_name, title, department, salary, manager_id }) =>
+        console.log(
+          `ID: ${id} | Name: ${first_name} ${last_name} | Title: ${title} | ` +
+          `Department: ${department} | Salary: $${salary.toFixed(2)} | Manager ID: ${manager_id || 'None'}`
+        )
+      );
+      console.log();
     } catch (error) {
-      console.error('Error fetching employees:', error);
+      console.log(error);
     }
   }
 
@@ -131,17 +109,19 @@ class Cli {
       {
         type: 'input',
         name: 'name',
-        message: 'What is the name of the department?',
-        validate: (input) => input.trim().length > 0 || 'Department name is required'
-      }
+        message: 'Department name:',
+        validate: (input) => input.trim().length > 0 || 'Department name is required.',
+      },
     ]);
 
-    const department = new Department(0, name);
     try {
-      await department.save(); // Ensure save method is defined in Department class
-      console.log(`Added ${name} department to the database`);
+      await new Department(
+        0, 
+        name.trim()).save();
+
+      console.log(`\nAdded department: ${name.trim()}\n`);
     } catch (error) {
-      console.error('Error adding department:', error);
+      console.log(error);
     }
   }
 
@@ -150,7 +130,7 @@ class Cli {
     try {
       const departments = await Department.getAll();
 
-      const answers = await inquirer.prompt([
+      const { title, salary, department } = await inquirer.prompt([
         {
           type: 'input',
           name: 'title',
@@ -174,11 +154,15 @@ class Cli {
         }
       ]);
 
-      const role = new Role(0, answers.title, parseFloat(answers.salary), answers.department);
-      await role.save(); // Ensure save method is defined in Role class
-      console.log(`Added ${answers.title} role to the database`);
+      await new Role(
+        0, 
+        title.trim(), 
+        parseFloat(salary), 
+        department).save();
+
+      console.log(`\nAdded role: ${title.trim()}\n`);
     } catch (error) {
-      console.error('Error adding role:', error);
+      console.log(error);
     }
   }
 
@@ -188,22 +172,22 @@ class Cli {
       const roles = await Role.getAll();
       const employees = await Employee.getAll();
 
-      const answers = await inquirer.prompt([
+      const { firstName, lastName, roleId, managerId } = await inquirer.prompt([
         {
           type: 'input',
-          name: 'first_name',
+          name: 'firstName',
           message: "What is the employee's first name?",
           validate: (input) => input.trim().length > 0 || 'First name is required'
         },
         {
           type: 'input',
-          name: 'last_name',
+          name: 'lastName',
           message: "What is the employee's last name?",
           validate: (input) => input.trim().length > 0 || 'Last name is required'
         },
         {
           type: 'list',
-          name: 'role_id',
+          name: 'roleId',
           message: "What is the employee's role?",
           choices: roles.map(role => ({
             name: role.title,
@@ -212,7 +196,7 @@ class Cli {
         },
         {
           type: 'list',
-          name: 'manager_id',
+          name: 'managerId',
           message: "Who is the employee's manager?",
           choices: [
             { name: 'None', value: null },
@@ -224,60 +208,53 @@ class Cli {
         }
       ]);
 
-      const employee = new Employee(
-        0,
-        answers.first_name,
-        answers.last_name,
-        answers.role_id,
-        answers.manager_id
-      );
-      await employee.save(); // Ensure save method is defined in Employee class
-      console.log(`Added ${answers.first_name} ${answers.last_name} to the database`);
+      await new Employee(
+        0, 
+        firstName.trim(), 
+        lastName.trim(), 
+        roleId, 
+        managerId).save();
+
+      console.log(`\nAdded employee: ${firstName.trim()} ${lastName.trim()}\n`);
     } catch (error) {
-      console.error('Error adding employee:', error);
+      console.log(error);
     }
   }
-
-  // Update an employee role
-  async updateEmployeeRole(): Promise<void> {
+  
+  private async updateEmployeeRole(): Promise<void> {
     try {
       const employees = await Employee.getAll();
       const roles = await Role.getAll();
 
-      const answers = await inquirer.prompt([
+      const { employee_id, role_id } = await inquirer.prompt([
         {
           type: 'list',
           name: 'employee_id',
-          message: 'Which employee\'s role do you want to update?',
-          choices: employees.map(emp => ({
-            name: `${emp.first_name} ${emp.last_name}`, // Ensure property names match
-            value: emp.id
-          }))
+          message: "Select the employee to update:",
+          choices: employees.map(({ id, first_name, last_name }) => ({
+            name: `${first_name} ${last_name}`,
+            value: id,
+          })),
         },
         {
           type: 'list',
-          name: 'roleId',
-          message: 'Which role do you want to assign to the selected employee?',
-          choices: roles.map(role => ({
-            name: role.title,
-            value: role.id
-          }))
-        }
+          name: 'role_id',
+          message: "Select the new role:",
+          choices: roles.map(({ id, title }) => ({ name: title, value: id })),
+        },
       ]);
-      export default Cli;
 
-         // Assuming you have an updateRole method in your Employee class
-         const employee = new Employee(
-          answers.employeeId,
-          '', '', // These values won't be used for the update
-          answers.roleId,
-          null
-        );
-
-  //       //Call the updateRole method on the employee instance
-        await employee.updateRole(answers.roleId);
-        console.log('Updated employee\'s role');
-      } catch (error) {
-        console.error('Error updating employee role:', error);
+      const employee = await Employee.findById(employee_id);
+      if (employee) {
+        await employee.updateRole(role_id);
+        console.log('\nEmployee role updated successfully.\n');
+      } else {
+        console.error('\nEmployee not found.\n');
+      }
+    } catch (error) {
+      console.log(error);
     }
-  }}
+  }
+}
+
+export default Cli;

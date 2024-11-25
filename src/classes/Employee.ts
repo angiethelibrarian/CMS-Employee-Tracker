@@ -8,7 +8,6 @@ interface Role {
 
 // Employee class
 class Employee {
-  // Declare properties
   id: number;
   firstName: string;
   lastName: string;
@@ -24,16 +23,13 @@ class Employee {
     lastName: string,
     roleId: number,
     managerId: number | null,
-    role?: Role, // Optional role parameter
-    manager?: Employee // Optional manager parameter
+  
   ) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.roleId = roleId;
     this.managerId = managerId;
-    this.role = role;
-    this.manager = manager;
   }
 
   // Method to get full name
@@ -59,5 +55,4 @@ class Employee {
   }
 }
 
-// Export all classes
-export { Employee, Role };
+export { Employee };

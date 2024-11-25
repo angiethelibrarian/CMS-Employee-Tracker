@@ -3,7 +3,6 @@ import { Pool } from 'pg';
 class Department {
     // Constructor
     constructor(id, name) {
-        // Declare properties
         Object.defineProperty(this, "id", {
             enumerable: true,
             configurable: true,
@@ -42,10 +41,4 @@ class Department {
         }
     }
 }
-// Example usage
-(async () => {
-    const department = new Department(1, 'Engineering');
-    department.printDetails();
-    await department.queryDatabase('SELECT $1::text as name', ['brianc']);
-})();
 export default Department;

@@ -1,10 +1,7 @@
 // Employee class
 class Employee {
     // Constructor
-    constructor(id, firstName, lastName, roleId, managerId, role, // Optional role parameter
-    manager // Optional manager parameter
-    ) {
-        // Declare properties
+    constructor(id, firstName, lastName, roleId, managerId) {
         Object.defineProperty(this, "id", {
             enumerable: true,
             configurable: true,
@@ -52,8 +49,6 @@ class Employee {
         this.lastName = lastName;
         this.roleId = roleId;
         this.managerId = managerId;
-        this.role = role;
-        this.manager = manager;
     }
     // Method to get full name
     getFullName() {
@@ -74,5 +69,4 @@ class Employee {
         }
     }
 }
-// Export all classes
 export { Employee };
