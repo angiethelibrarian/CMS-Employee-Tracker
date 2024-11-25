@@ -231,7 +231,7 @@ class Cli {
           type: 'list',
           name: 'employee_id',
           message: "Select the employee to update:",
-          choices: employees.map(({ id, first_name, last_name }) => ({
+          choices: employees.map(({ id: value, first_name: string, last_name: string }) => ({
             name: `${first_name} ${last_name}`,
             value: id,
           })),
