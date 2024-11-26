@@ -3,32 +3,23 @@ import { Pool } from 'pg';
 class Department {
     // Constructor
     constructor(id, name) {
-        Object.defineProperty(this, "id", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
-        Object.defineProperty(this, "name", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
+        // id?: number;
+        // name?: string;
         Object.defineProperty(this, "pool", {
             enumerable: true,
             configurable: true,
             writable: true,
             value: void 0
         });
-        this.id = id;
-        this.name = name;
+        // this.id = id;
+        // this.name = name;
         this.pool = new Pool();
     }
     // Method to print department details
-    printDetails() {
-        console.log(`Department ID: ${this.id}`);
-        console.log(`Department Name: ${this.name}`);
+    printDetails(data) {
+        // console.log(`Department ID: ${this.id}`);
+        // console.log(`Department Name: ${this.name}`);
+        console.table(data);
     }
     // Method to query the database
     async queryDatabase(query, params) {
@@ -39,6 +30,12 @@ class Department {
         catch (error) {
             console.error('Database query error:', error);
         }
+    }
+    async getAll() {
+        return this.queryDatabase("SELECT * FROM department", []);
+    }
+    async add(name) {
+        return this.queryDatabase("INSERT INTO department(name) VALUES ($1)", [name]);
     }
 }
 export default Department;

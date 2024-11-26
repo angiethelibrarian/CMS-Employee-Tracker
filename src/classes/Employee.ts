@@ -1,9 +1,11 @@
-import inquirer from "inquirer";
+
 
 // Assuming Role is defined as follows. Replace with your actual Role definition.
 interface Role {
   title: string;
   salary: number;
+  role: string;
+  departmentId: number
 }
 
 // Employee class

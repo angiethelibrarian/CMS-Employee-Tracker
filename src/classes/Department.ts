@@ -1,23 +1,23 @@
-import inquirer from "inquirer";
 import { Pool } from 'pg';
 
 // Department class
 class Department {
-  id: number;
-  name: string;
+  // id?: number;
+  // name?: string;
   private pool: Pool;
 
   // Constructor
-  constructor(id: number, name: string) {
-    this.id = id;
-    this.name = name;
+  constructor() {
+    // this.id = id;
+    // this.name = name;
     this.pool = new Pool();
   }
 
   // Method to print department details
-  printDetails(): void {
-    console.log(`Department ID: ${this.id}`);
-    console.log(`Department Name: ${this.name}`);
+  printDetails(data: any): void {
+    // console.log(`Department ID: ${this.id}`);
+    // console.log(`Department Name: ${this.name}`);
+    console.table(data);
   }
 
   // Method to query the database
@@ -28,6 +28,13 @@ class Department {
     } catch (error) {
       console.error('Database query error:', error);
     }
+  }
+  async getAll() {
+    return this.queryDatabase("SELECT * FROM department", [])
+  } 
+  
+  async add(name: string) {
+    return this.queryDatabase("INSERT INTO department(name) VALUES ($1)", [name])
   }
 }
 
