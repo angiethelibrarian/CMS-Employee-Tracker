@@ -1,11 +1,9 @@
-
-
 // Assuming Role is defined as follows. Replace with your actual Role definition.
 interface Role {
   title: string;
   salary: number;
   role: string;
-  departmentId: number
+  departmentId: number;
 }
 
 // Employee class
@@ -24,8 +22,7 @@ class Employee {
     firstName: string,
     lastName: string,
     roleId: number,
-    managerId: number | null,
-  
+    managerId: number | null
   ) {
     this.id = id;
     this.firstName = firstName;
@@ -44,7 +41,7 @@ class Employee {
     console.log(`Employee ID: ${this.id}`);
     console.log(`Name: ${this.getFullName()}`);
     console.log(`Role ID: ${this.roleId}`);
-    console.log(`Manager ID: ${this.managerId || 'No manager'}`);
+    console.log(`Manager ID: ${this.managerId !== null ? this.managerId : 'No manager'}`);
 
     if (this.role) {
       console.log(`Title: ${this.role.title}`);

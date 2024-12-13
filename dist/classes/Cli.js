@@ -4,8 +4,6 @@ import Role from "./Role";
 import { Employee } from "./Employee";
 // Class
 class Cli {
-    // role: Role;
-    // employee: Employee;
     // Constructor
     constructor() {
         Object.defineProperty(this, "department", {
@@ -14,9 +12,22 @@ class Cli {
             writable: true,
             value: void 0
         });
+        Object.defineProperty(this, "role", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "employee", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
         this.department = new Department();
-        // this.role = new Role();
-        // this.employee = new Employee();
+        this.role = new Role();
+        // Creating a dummy employee for now; you might want to manage Employees differently
+        this.employee = new Employee(0, "", "", 0, null); // Provide default values to match constructor
     }
     async startCli() {
         let exit = false;
@@ -39,76 +50,58 @@ class Cli {
                 }
             ]);
             try {
-                switch (choice) {
-                    case 'View all departments':
-                        await this.viewDepartments();
-                        break;
-                    case 'View all roles':
-                        await this.viewRoles();
-                        break;
-                    case 'View all employees':
-                        await this.viewEmployees();
-                        break;
-                    case 'Add a department':
-                        await this.addDepartment();
-                        break;
-                    case 'Add a role':
-                        await this.addRole();
-                        break;
-                    case 'Add an employee':
-                        await this.addEmployee();
-                        break;
-                    case 'Update an employee role':
-                        await this.updateEmployeeRole();
-                        break;
-                    case 'Exit':
-                        exit = true;
-                        break;
-                }
+                const actions = {
+                    'View all departments': () => this.viewDepartments(),
+                    'View all roles': () => this.viewRoles(),
+                    'View all employees': () => this.viewEmployees(),
+                    'Add a department': () => this.addDepartment(),
+                    'Add a role': () => this.addRole(),
+                    'Add an employee': () => this.addEmployee(),
+                    'Update an employee role': () => this.updateEmployeeRole(),
+                    'Exit': () => { exit = true; return Promise.resolve(); }
+                };
+                if (actions[choice])
+                    await actions[choice]();
             }
             catch (error) {
                 console.log(error);
             }
         }
     }
-    // View all departments
+    // Helper to display list with printing
+    async displayList(title, items, printFunction) {
+        console.log(`\n${title}:`);
+        items.forEach(printFunction);
+        console.log();
+    }
     async viewDepartments() {
         try {
             const departments = await this.department.getAll();
-            console.log('Departments:');
-            // departments.forEach(({ id, name }) => console.log(`ID: ${id} | Name: ${name}`));
-            this.department.printDetails(departments);
+            this.displayList('Departments', departments, ({ id, name }) => console.log(`ID: ${id} | Name: ${name}`));
         }
         catch (error) {
             console.log(error);
         }
     }
-    // View all roles
     async viewRoles() {
         try {
-            const roles = await Role.getAll();
-            console.log('\nRoles:');
-            roles.forEach(({ id, title, department, salary }) => console.log(`ID: ${id} | Title: ${title} | Department: ${department} | Salary: $${salary.toFixed(2)}`));
-            console.log();
+            const roles = await this.role.getAll();
+            this.displayList('Roles', roles, (role) => console.log(`ID: ${role.id} | Title: ${role.title} | Department: ${role.department} | Salary: $${role.salary.toFixed(2)}`));
         }
         catch (error) {
             console.log(error);
         }
     }
-    // View all employees
     async viewEmployees() {
         try {
-            const employees = await Employee.getAll();
-            console.log('\nEmployees:');
-            employees.forEach(({ id, first_name, last_name, title, department, salary, manager_id }) => console.log(`ID: ${id} | Name: ${first_name} ${last_name} | Title: ${title} | ` +
-                `Department: ${department} | Salary: $${salary.toFixed(2)} | Manager ID: ${manager_id || 'None'}`));
-            console.log();
+            const employees = await this.employee.getAll(); // Assuming this returns an array
+            this.displayList('Employees', employees, ({ id, firstName, lastName, role, managerId }) => console.log(`ID: ${id} | Name: ${firstName} ${lastName} | Title: ${role?.title} | ` +
+                `Department: ${role?.departmentId} | Salary: $${role?.salary.toFixed(2)} | Manager ID: ${managerId || 'None'}`));
         }
         catch (error) {
             console.log(error);
         }
     }
-    // Add a department
     async addDepartment() {
         const { name } = await inquirer.prompt([
             {
@@ -121,16 +114,12 @@ class Cli {
         try {
             await this.department.add(name);
             console.log(`\nAdded department: ${name.trim()}\n`);
-            const departments = await this.department.getAll();
-            console.log('Departments:');
-            // departments.forEach(({ id, name }) => console.log(`ID: ${id} | Name: ${name}`));
-            this.department.printDetails(departments);
+            await this.viewDepartments();
         }
         catch (error) {
             console.log(error);
         }
     }
-    // Add a role
     async addRole() {
         const { title, salary, department } = await inquirer.prompt([
             {
@@ -139,134 +128,99 @@ class Cli {
                 message: 'What is the name of the role?',
                 validate: (input) => input.trim().length > 0 || 'Role title is required'
             },
-        ]);
-        {
-            type: 'input',
-                name;
-            'salary',
-                message;
-            'What is the salary for this role?',
-                validate;
-            (input) => !isNaN(parseFloat(input)) || 'Please enter a valid salary';
-        }
-        {
-            type: 'list',
-                name;
-            'department',
-                message;
-            'Which department does this role belong to?',
-                choices;
-            departments.map(dept => ({
-                name: dept.name,
-                value: dept.id
-            }));
-        }
-    }
-    ;
-}
-try {
-    await this.role.add(title, salary, department);
-    console.log(`\nAdded role: ${title.trim()}\n`);
-    console.log(`\nAdded role: ${salary.trim()}\n`);
-    console.log(`\nAdded role: ${department.trim()}\n`);
-}
-finally {
-}
-const role = await this.role.getAll();
-console.log('Role:');
-// role.forEach(({ title, salary, department }) => console.log(`Title: ${title} | Salary: ${salary} | Department: ${department}`));
-this.role.printDetails(role);
-try {
-}
-catch (error) {
-    console.log(error);
-}
-await new Role(0, title.trim(), parseFloat(salary), department).save();
-console.log(`\nAdded role: ${title.trim()}\n`);
-try { }
-catch (error) {
-    console.log(error);
-}
-// Add an employee
-async;
-addEmployee();
-Promise < void  > {
-    try: {
-        const: roles = await Role.getAll(),
-        const: employees = await Employee.getAll(),
-        const: { firstName, lastName, roleId, managerId } = await inquirer.prompt([
             {
                 type: 'input',
-                name: 'firstName',
-                message: "What is the employee's first name?",
-                validate: (input) => input.trim().length > 0 || 'First name is required'
-            },
-            {
-                type: 'input',
-                name: 'lastName',
-                message: "What is the employee's last name?",
-                validate: (input) => input.trim().length > 0 || 'Last name is required'
+                name: 'salary',
+                message: 'What is the salary for this role?',
+                validate: (input) => !isNaN(parseFloat(input)) || 'Please enter a valid salary'
             },
             {
                 type: 'list',
-                name: 'roleId',
-                message: "What is the employee's role?",
-                choices: roles.map(role => ({
-                    name: role.title,
-                    value: role.id
-                }))
-            },
-            {
-                type: 'list',
-                name: 'managerId',
-                message: "Who is the employee's manager?",
-                choices: [
-                    { name: 'None', value: null },
-                    ...employees.map(emp => ({
-                        name: `${emp.firstName} ${emp.lastName}`, // Ensure property names match
-                        value: emp.id
-                    }))
-                ]
+                name: 'department',
+                message: 'Which department does this role belong to?',
+                choices: await this.department.getAll().then(depts => depts.map((dept) => ({ name: dept.name, value: dept.id })))
             }
-        ]),
-        await, new: Employee(0, firstName.trim(), lastName.trim(), roleId, managerId).save(),
-        console, : .log(`\nAdded employee: ${firstName.trim()} ${lastName.trim()}\n`)
-    }, catch(error) {
-        console.log(error);
-    }
-};
-async;
-updateEmployeeRole();
-Promise < void  > {
-    try: {
-        const: employees = await Employee.getAll(),
-        const: roles = await Role.getAll(),
-        const: { employee_id, role_id } = await inquirer.prompt([
-            {
-                type: 'list',
-                name: 'employee_id',
-                message: "Select the employee to update:",
-                choices: employees.map(({ id: value, first_name: string, last_name: string }) => ({
-                    name: `${first_name} ${last_name}`,
-                    value: id,
-                })),
-            },
-            {
-                type: 'list',
-                name: 'role_id',
-                message: "Select the new role:",
-                choices: roles.map(({ id, title }) => ({ name: title, value: id })),
-            },
-        ]),
-        const: employee = await Employee.findById(employee_id),
-        if(employee) {
-            await employee.updateRole(role_id);
-            console.log('\nEmployee role updated successfully.\n');
-        }, else: {
-            console, : .error('\nEmployee not found.\n')
+        ]);
+        try {
+            await this.role.add(title, parseFloat(salary), department);
+            console.log(`\nAdded role: ${title.trim()}\n`);
+            await this.viewRoles();
         }
-    }, catch(error) {
-        console.log(error);
+        catch (error) {
+            console.log(error);
+        }
     }
-};
+    async addEmployee() {
+        try {
+            const roles = await this.role.getAll(); // Fixed to use this.role.getAll()
+            const employees = await this.employee.getAll();
+            const { firstName, lastName, roleId, managerId } = await inquirer.prompt([
+                {
+                    type: 'input',
+                    name: 'firstName',
+                    message: "What is the employee's first name?",
+                    validate: (input) => input.trim().length > 0 || 'First name is required'
+                },
+                {
+                    type: 'input',
+                    name: 'lastName',
+                    message: "What is the employee's last name?",
+                    validate: (input) => input.trim().length > 0 || 'Last name is required'
+                },
+                {
+                    type: 'list',
+                    name: 'roleId',
+                    message: "What is the employee's role?",
+                    choices: roles.map((role) => ({ name: role.title, value: role.id }))
+                },
+                {
+                    type: 'list',
+                    name: 'managerId',
+                    message: "Who is the employee's manager?",
+                    choices: [
+                        { name: 'None', value: null },
+                        ...employees.map((emp) => ({ name: `${emp.firstName} ${emp.lastName}`, value: emp.id }))
+                    ]
+                }
+            ]);
+            const newEmployee = new Employee(0, firstName.trim(), lastName.trim(), roleId, managerId); // Use constructor correctly
+            await newEmployee.save(); // Assuming save is a method in Employee class
+            console.log(`\nAdded employee: ${firstName.trim()} ${lastName.trim()}\n`);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    async updateEmployeeRole() {
+        try {
+            const employees = await this.employee.getAll();
+            const roles = await this.role.getAll();
+            const { employee_id, role_id } = await inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'employee_id',
+                    message: "Select the employee to update:",
+                    choices: employees.map(({ id, firstName, lastName }) => ({ name: `${firstName} ${lastName}`, value: id })),
+                },
+                {
+                    type: 'list',
+                    name: 'role_id',
+                    message: "Select the new role:",
+                    choices: roles.map(({ id, title }) => ({ name: title, value: id })),
+                },
+            ]);
+            const employee = await Employee.findById(employee_id); // Assuming this is a static method
+            if (employee) {
+                await employee.updateRole(role_id); // Assuming updateRole is a method in Employee class
+                console.log('\nEmployee role updated successfully.\n');
+            }
+            else {
+                console.error('\nEmployee not found.\n');
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+}
 export default Cli;

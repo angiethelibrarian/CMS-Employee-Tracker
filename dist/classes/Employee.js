@@ -59,7 +59,7 @@ class Employee {
         console.log(`Employee ID: ${this.id}`);
         console.log(`Name: ${this.getFullName()}`);
         console.log(`Role ID: ${this.roleId}`);
-        console.log(`Manager ID: ${this.managerId || 'No manager'}`);
+        console.log(`Manager ID: ${this.managerId !== null ? this.managerId : 'No manager'}`);
         if (this.role) {
             console.log(`Title: ${this.role.title}`);
             console.log(`Salary: $${this.role.salary}`);

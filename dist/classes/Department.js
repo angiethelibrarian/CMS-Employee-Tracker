@@ -2,7 +2,7 @@ import { Pool } from 'pg';
 // Department class
 class Department {
     // Constructor
-    constructor(id, name) {
+    constructor() {
         // id?: number;
         // name?: string;
         Object.defineProperty(this, "pool", {
