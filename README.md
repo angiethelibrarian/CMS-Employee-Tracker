@@ -36,7 +36,8 @@ Manage data related to departments, roles, and other company resources by intera
 
 - Angelica Mora
 - Inquirer and 'pg' package - https://www.npmjs.com/package/pg
-- 
+- Tutor help via https://bootcampspot.instructure.com/courses/6651/external_tools/429
+-
 
 ## Questions
 
