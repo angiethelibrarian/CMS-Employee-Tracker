@@ -1,10 +1,12 @@
-import { Pool } from 'pg';
+import pg from 'pg';
+const { Pool } = pg;
+
 
 // Department class
 class Department {
   // id?: number;
   // name?: string;
-  private pool: Pool;
+  private pool: any;
 
   // Constructor
   constructor() {
@@ -24,12 +26,13 @@ class Department {
   async queryDatabase(query: string, params: any[]): Promise<void> {
     try {
       const result = await this.pool.query(query, params);
-      console.log('Query Result:', result.rows);
+      // console.log('Query Result:', result.rows);
+      console.table(result.rows);
     } catch (error) {
       console.error('Database query error:', error);
     }
   }
-  async getAll() {
+  async getAll(): Promise<any> {
     return this.queryDatabase("SELECT * FROM department", [])
   } 
   

@@ -1,7 +1,7 @@
 import inquirer from "inquirer";
-import Department from "./Department";
-import Role from "./Role";
-import { Employee } from "./Employee";
+import Department from "./Department.js";
+import Role from "./Role.js";
+import { Employee } from "./Employee.js";
 // Class
 class Cli {
     // Constructor
@@ -57,7 +57,7 @@ class Cli {
                     'Add a department': () => this.addDepartment(),
                     'Add a role': () => this.addRole(),
                     'Add an employee': () => this.addEmployee(),
-                    'Update an employee role': () => this.updateEmployeeRole(),
+                    // 'Update an employee role': () => this.updateEmployeeRole(), TO DO: implement later
                     'Exit': () => { exit = true; return Promise.resolve(); }
                 };
                 if (actions[choice])
@@ -186,37 +186,6 @@ class Cli {
             const newEmployee = new Employee(0, firstName.trim(), lastName.trim(), roleId, managerId); // Use constructor correctly
             await newEmployee.save(); // Assuming save is a method in Employee class
             console.log(`\nAdded employee: ${firstName.trim()} ${lastName.trim()}\n`);
-        }
-        catch (error) {
-            console.log(error);
-        }
-    }
-    async updateEmployeeRole() {
-        try {
-            const employees = await this.employee.getAll();
-            const roles = await this.role.getAll();
-            const { employee_id, role_id } = await inquirer.prompt([
-                {
-                    type: 'list',
-                    name: 'employee_id',
-                    message: "Select the employee to update:",
-                    choices: employees.map(({ id, firstName, lastName }) => ({ name: `${firstName} ${lastName}`, value: id })),
-                },
-                {
-                    type: 'list',
-                    name: 'role_id',
-                    message: "Select the new role:",
-                    choices: roles.map(({ id, title }) => ({ name: title, value: id })),
-                },
-            ]);
-            const employee = await Employee.findById(employee_id); // Assuming this is a static method
-            if (employee) {
-                await employee.updateRole(role_id); // Assuming updateRole is a method in Employee class
-                console.log('\nEmployee role updated successfully.\n');
-            }
-            else {
-                console.error('\nEmployee not found.\n');
-            }
         }
         catch (error) {
             console.log(error);

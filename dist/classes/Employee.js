@@ -1,3 +1,5 @@
+import pg from 'pg';
+const { Pool } = pg;
 // Employee class
 class Employee {
     // Constructor
@@ -44,16 +46,42 @@ class Employee {
             writable: true,
             value: void 0
         }); // Optional manager property
+        Object.defineProperty(this, "pool", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.roleId = roleId;
         this.managerId = managerId;
+        this.pool = new Pool();
     }
     // Method to get full name
     getFullName() {
         return `${this.firstName} ${this.lastName}`;
     }
+    async queryEmployee(query, params) {
+        try {
+            const result = await this.pool.query(query, params);
+            return result; // Return the result from the query
+        }
+        catch (error) {
+            console.error('Employee query error:', error);
+            throw error; // Rethrow the error for further handling
+        }
+    }
+    async getAll() {
+        return this.queryEmployee("SELECT * FROM employee", []);
+    }
+    async save() {
+        return this.queryEmployee("INSERT INTO employee(firstName, lastName, roleId, managerId) VALUES ($1, $2, $3, $4)", [this.firstName, this.lastName, this.roleId, this.managerId]);
+    }
+    // async findById(): Promise<any> {
+    //   return this.queryEmployee("")
+    // }
     // Method to print employee details
     printDetails() {
         console.log(`Employee ID: ${this.id}`);

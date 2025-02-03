@@ -1,4 +1,5 @@
-import { Pool } from 'pg';
+import pg from 'pg';
+const { Pool } = pg;
 // Department class
 class Department {
     // Constructor
@@ -25,7 +26,8 @@ class Department {
     async queryDatabase(query, params) {
         try {
             const result = await this.pool.query(query, params);
-            console.log('Query Result:', result.rows);
+            // console.log('Query Result:', result.rows);
+            console.table(result.rows);
         }
         catch (error) {
             console.error('Database query error:', error);

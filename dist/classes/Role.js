@@ -1,4 +1,5 @@
-import { Pool } from "pg"; // Assuming you're using pg package for PostgreSQL
+import pg from 'pg';
+const { Pool } = pg;
 // Role class
 class Role {
     // Constructor

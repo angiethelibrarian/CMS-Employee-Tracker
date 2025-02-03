@@ -1,3 +1,6 @@
+import pg from 'pg';
+const { Pool } = pg;
+
 // Assuming Role is defined as follows. Replace with your actual Role definition.
 interface Role {
   title: string;
@@ -15,6 +18,7 @@ class Employee {
   managerId: number | null;
   role?: Role; // Optional role property
   manager?: Employee; // Optional manager property
+  pool: any;
 
   // Constructor
   constructor(
@@ -29,12 +33,34 @@ class Employee {
     this.lastName = lastName;
     this.roleId = roleId;
     this.managerId = managerId;
+    this.pool = new Pool();
   }
 
   // Method to get full name
   getFullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
+
+  private async queryEmployee(query: string, params: any[]): Promise<any> {
+    try {
+      const result = await this.pool.query(query, params);
+      return result; // Return the result from the query
+    } catch (error) {
+      console.error('Employee query error:', error);
+      throw error; // Rethrow the error for further handling
+    }
+  }
+  async getAll(): Promise<any> {
+    return this.queryEmployee("SELECT * FROM employee", []);
+  } 
+
+  async save(): Promise<any> {
+    return this.queryEmployee("INSERT INTO employee(firstName, lastName, roleId, managerId) VALUES ($1, $2, $3, $4)", [this.firstName, this.lastName, this.roleId, this.managerId]);
+  }
+
+  // async findById(): Promise<any> {
+  //   return this.queryEmployee("")
+  // }
 
   // Method to print employee details
   printDetails(): void {

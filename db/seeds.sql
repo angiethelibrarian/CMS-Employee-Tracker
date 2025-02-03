@@ -10,4 +10,4 @@ insert into role(id,title,salary,department_id) values(4,'Regional Director of S
 insert into employee(id,first_name,last_name,role_id,manager_id) values(1,'Toby','Flenderson',1,NULL);
 insert into employee(id,first_name,last_name,role_id,manager_id) values(2,'Luis','Lopez',2,1);
 insert into employee(id,first_name,last_name,role_id,manager_id) values(3,'Creed','Bratton',3,1);
-insert into employee(id,first_name,last_name,role_id,manager_id) values(3,'Phyllis','Vance',4,NULL);
+insert into employee(id,first_name,last_name,role_id,manager_id) values(4,'Phyllis','Vance',4,NULL);
