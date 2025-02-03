@@ -29,7 +29,7 @@ Manage data related to departments, roles, and other company resources by intera
 
 ## Walkthrough
 
-
+-https://drive.google.com/file/d/1k2O9DnIvKaBA2gA-afGWo92JMExJmMkf/view?usp=share_link
 
 
 ## Contributing

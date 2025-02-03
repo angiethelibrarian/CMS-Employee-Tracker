@@ -72,15 +72,6 @@ class Cli {
     async displayList(title, items, printFunction) {
         console.log(`\n${title}:`);
         items.forEach(printFunction);
-        console.log();  
-    }
-    async displayList(title, items, printFunction) {
-        if (!Array.isArray(items)) {
-            console.log(`\n${title}: No data available.\n`);
-            return;
-        }
-        console.log(`\n${title}:`);
-        items.forEach(printFunction);
         console.log();
     }
     async viewDepartments() {
